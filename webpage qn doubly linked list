@@ -1,0 +1,133 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+struct node
+{
+    char page[50];
+    struct node *prev, *next;
+};
+
+struct node *head = NULL, *current = NULL;
+
+void visit()
+{
+    struct node *newnode, *temp;
+
+    newnode = (struct node*)malloc(sizeof(struct node));
+
+    printf("Enter webpage name: ");
+    scanf("%49s", newnode->page);
+
+    newnode->prev = NULL;
+    newnode->next = NULL;
+
+    if(head == NULL)
+    {
+        head = current = newnode;
+    }
+    else
+    {
+        temp = current->next;
+
+        while(temp != NULL)
+        {
+            struct node *del = temp;
+            temp = temp->next;
+            free(del);
+        }
+
+        current->next = newnode;
+        newnode->prev = current;
+        current = newnode;
+    }
+
+    printf("Page visited: %s\n", current->page);
+}
+
+void backward()
+{
+    if(current == NULL || current->prev == NULL)
+        printf("No previous page\n");
+    else
+    {
+        current = current->prev;
+        printf("Current page: %s\n", current->page);
+    }
+}
+
+void forward()
+{
+    if(current == NULL || current->next == NULL)
+        printf("No next page\n");
+    else
+    {
+        current = current->next;
+        printf("Current page: %s\n", current->page);
+    }
+}
+
+void display()
+{
+    struct node *temp = head;
+
+    if(head == NULL)
+    {
+        printf("History is empty\n");
+        return;
+    }
+
+    printf("Browser History:\n");
+
+    while(temp != NULL)
+    {
+        printf("%s", temp->page);
+
+        if(temp == current)
+            printf(" <-- Current Page");
+
+        printf("\n");
+        temp = temp->next;
+    }
+}
+
+int main()
+{
+    int ch;
+
+    while(1)
+    {
+        printf("\n1.Visit Page\n2.Backward");
+        printf("\n3.Forward\n4.Display History");
+        printf("\n5.Exit\n");
+
+        printf("Enter choice: ");
+        scanf("%d", &ch);
+
+        switch(ch)
+        {
+            case 1:
+                visit();
+                break;
+
+            case 2:
+                backward();
+                break;
+
+            case 3:
+                forward();
+                break;
+
+            case 4:
+                display();
+                break;
+
+            case 5:
+                return 0;
+
+            default:
+                printf("Invalid choice\n");
+        }
+    }
+}
