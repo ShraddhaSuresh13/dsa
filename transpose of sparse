@@ -1,0 +1,70 @@
+
+#include <stdio.h>
+
+int main()
+{
+    int a[20][20], b[100][3], t[100][3];
+    int r, c, i, j, k = 1;
+
+    printf("Enter number of rows and columns: ");
+    scanf("%d%d", &r, &c);
+
+    printf("Enter matrix elements:\n");
+    for(i = 0; i < r; i++)
+    {
+        for(j = 0; j < c; j++)
+        {
+            scanf("%d", &a[i][j]);
+
+            if(a[i][j] != 0)
+            {
+                b[k][0] = i;
+                b[k][1] = j;
+                b[k][2] = a[i][j];
+                k++;
+            }
+        }
+    }
+
+    b[0][0] = r;
+    b[0][1] = c;
+    b[0][2] = k - 1;
+
+    t[0][0] = c;
+    t[0][1] = r;
+    t[0][2] = k - 1;
+
+    int n = 1;
+
+    for(j = 0; j < c; j++)
+    {
+        for(i = 1; i < k; i++)
+        {
+            if(b[i][1] == j)
+            {
+                t[n][0] = b[i][1];
+                t[n][1] = b[i][0];
+                t[n][2] = b[i][2];
+                n++;
+            }
+        }
+    }
+
+    printf("\nOriginal triplet representation:\n");
+    for(i = 0; i < k; i++)
+    {
+        for(j = 0; j < 3; j++)
+            printf("%d\t", b[i][j]);
+        printf("\n");
+    }
+
+    printf("\nTranspose triplet representation:\n");
+    for(i = 0; i < n; i++)
+    {
+        for(j = 0; j < 3; j++)
+            printf("%d\t", t[i][j]);
+        printf("\n");
+    }
+
+    return 0;
+}
