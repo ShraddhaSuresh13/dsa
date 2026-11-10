@@ -1,0 +1,114 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node
+{
+    int coeff, expo;
+    struct node *next;
+};
+
+struct node* create()
+{
+    struct node *head = NULL, *temp, *newnode;
+    int n, i;
+
+    printf("Enter number of terms: ");
+    scanf("%d", &n);
+
+    for(i = 0; i < n; i++)
+    {
+        newnode = (struct node*)malloc(sizeof(struct node));
+
+        printf("Enter coefficient and exponent: ");
+        scanf("%d%d", &newnode->coeff, &newnode->expo);
+
+        newnode->next = NULL;
+
+        if(head == NULL)
+            head = newnode;
+        else
+            temp->next = newnode;
+
+        temp = newnode;
+    }
+
+    return head;
+}
+
+void insert(struct node **head, int c, int e)
+{
+    struct node *temp = *head, *prev = NULL, *newnode;
+
+    while(temp != NULL && temp->expo > e)
+    {
+        prev = temp;
+        temp = temp->next;
+    }
+
+    if(temp != NULL && temp->expo == e)
+    {
+        temp->coeff += c;
+        return;
+    }
+
+    newnode = (struct node*)malloc(sizeof(struct node));
+    newnode->coeff = c;
+    newnode->expo = e;
+    newnode->next = temp;
+
+    if(prev == NULL)
+        *head = newnode;
+    else
+        prev->next = newnode;
+}
+
+struct node* multiply(struct node *p1, struct node *p2)
+{
+    struct node *result = NULL, *temp, *q;
+
+    for(temp = p1; temp != NULL; temp = temp->next)
+    {
+        for(q = p2; q != NULL; q = q->next)
+        {
+            int c = temp->coeff * q->coeff;
+            int e = temp->expo + q->expo;
+
+            insert(&result, c, e);
+        }
+    }
+
+    return result;
+}
+
+void display(struct node *head)
+{
+    while(head != NULL)
+    {
+        if(head->coeff != 0)
+            printf("%dx^%d", head->coeff, head->expo);
+
+        if(head->next != NULL)
+            printf(" + ");
+
+        head = head->next;
+    }
+    printf("\n");
+}
+
+int main()
+{
+    struct node *p1, *p2, *result;
+
+    printf("Enter first polynomial:\n");
+    p1 = create();
+
+    printf("Enter second polynomial:\n");
+    p2 = create();
+
+    result = multiply(p1, p2);
+
+    printf("Product = ");
+    display(result);
+
+    return 0;
+}
