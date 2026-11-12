@@ -1,0 +1,78 @@
+#include <stdio.h>
+
+struct sparse
+{
+    int row, col, val;
+};
+
+int main()
+{
+    struct sparse a[20], b[20], c[40];
+    int i, j, k = 1, m, n;
+
+    printf("Enter rows and columns: ");
+    scanf("%d%d", &m, &n);
+
+    printf("Enter number of non-zero elements in A: ");
+    scanf("%d", &a[0].val);
+
+    a[0].row = m;
+    a[0].col = n;
+
+    printf("Enter row, column and value:\n");
+    for(i = 1; i <= a[0].val; i++)
+        scanf("%d%d%d", &a[i].row, &a[i].col, &a[i].val);
+
+    printf("Enter number of non-zero elements in B: ");
+    scanf("%d", &b[0].val);
+
+    b[0].row = m;
+    b[0].col = n;
+
+    printf("Enter row, column and value:\n");
+    for(i = 1; i <= b[0].val; i++)
+        scanf("%d%d%d", &b[i].row, &b[i].col, &b[i].val);
+
+    i = 1;
+    j = 1;
+
+    while(i <= a[0].val && j <= b[0].val)
+    {
+        if(a[i].row == b[j].row && a[i].col == b[j].col)
+        {
+            c[k].row = a[i].row;
+            c[k].col = a[i].col;
+            c[k].val = a[i].val + b[j].val;
+            i++;
+            j++;
+            k++;
+        }
+        else if(a[i].row < b[j].row ||
+               (a[i].row == b[j].row && a[i].col < b[j].col))
+        {
+            c[k++] = a[i++];
+        }
+        else
+        {
+            c[k++] = b[j++];
+        }
+    }
+
+    while(i <= a[0].val)
+        c[k++] = a[i++];
+
+    while(j <= b[0].val)
+        c[k++] = b[j++];
+
+    c[0].row = m;
+    c[0].col = n;
+    c[0].val = k - 1;
+
+    printf("\nResultant sparse matrix:\n");
+    printf("Row\tCol\tValue\n");
+
+    for(i = 0; i < k; i++)
+        printf("%d\t%d\t%d\n", c[i].row, c[i].col, c[i].val);
+
+    return 0;
+}
